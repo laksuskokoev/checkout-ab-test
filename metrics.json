@@ -1,0 +1,29 @@
+{
+  "dataset_type": "SYNTHETIC; NOT REAL CUSTOMERS",
+  "analysis_window": "2026-09-01 to 2026-09-28 (synthetic)",
+  "n_control": 14975,
+  "n_treatment": 15025,
+  "conversions_control": 1602,
+  "conversions_treatment": 1849,
+  "conversion_control": 0.10697829716193656,
+  "conversion_treatment": 0.12306156405990017,
+  "conversion_delta_pp": 1.6083266897963604,
+  "relative_conversion_lift_pct": 15.034139937391073,
+  "ci95_conversion_delta_pp": [
+    0.8864572671380386,
+    2.3303927102153708
+  ],
+  "p_value_primary": 1.2686149144388014e-05,
+  "z_stat": 4.3654497033514925,
+  "srm_p_value": 0.7728299926844475,
+  "net_revenue_per_user_control_rub": 267.3097161936561,
+  "net_revenue_per_user_treatment_rub": 310.5651247920133,
+  "net_revenue_per_user_delta_rub": 43.255408598357235,
+  "ci95_net_revenue_per_user_delta_rub_bootstrap": [
+    22.64633649537913,
+    61.85020430612307
+  ],
+  "refund_rate_given_purchase_control": 0.05056179775280899,
+  "refund_rate_given_purchase_treatment": 0.0411032990805841,
+  "recommendation": "Consider a staged rollout with refund and revenue monitoring"
+}
