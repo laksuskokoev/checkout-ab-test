@@ -2,7 +2,7 @@
 
 **Portfolio case study · Product Analytics · Python · SQL · Experimentation**
 
-> **Synthetic data / учебная симуляция.** All 30,000 user records and transactions are generated, not obtained from a real store. This repository demonstrates the analytical process rather than claiming real business impact.
+> **Synthetic data / синтетические данные.** All 30,000 user records and transactions are generated, not obtained from a real store. This repository demonstrates the analytical process rather than claiming real business impact.
 
 ## Business question / Бизнес-задача
 
@@ -46,7 +46,6 @@ checkout-ab-test/
 ├── figures/                               # generated plots
 ├── reports/                               # computed results and recommendation
 ├── tests/                                 # basic data/metrics checks
-└── docs/                                  # Russian study, interview and GitHub guides
 ```
 
 ## Reproduction (Python 3.10+)
@@ -70,9 +69,5 @@ python -m pytest -q
 4. **Absolute vs relative lift:** percentage points and percent lift are different quantities.
 5. **Guardrails & limitations:** a small refund difference cannot prove absence of harm.
 
-## For interviews
-
-- [Пошаговый разбор и почему я делал этот проект](docs/project_story_ru.md)
-- [Как загрузить на GitHub через браузер](docs/github_upload_ru.md)
 
 **No actual user/customer records, employer claims, personal credentials, or production access are included.**
