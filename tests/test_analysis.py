@@ -36,3 +36,26 @@ def test_summary_matches_counts():
     assert r["n_control"] > 200
     assert r["n_treatment"] > 200
     assert r["conversions_control"] == df.loc[df.variant.eq("control"),"converted"].sum()
+
+
+def test_validate_reports_missing_columns_as_value_error():
+    df=generate(n_per_arm=10,seed=1).drop(columns=["device"])
+    with pytest.raises(ValueError,match="Missing columns"):
+        validate(df)
+
+
+def test_validate_rejects_nan_variant():
+    df=generate(n_per_arm=10,seed=1)
+    df.loc[0,"variant"]=None
+    with pytest.raises(ValueError,match="Unexpected variants"):
+        validate(df)
+
+
+def test_bootstrap_rejects_empty_sample():
+    with pytest.raises(ValueError,match="non-empty"):
+        bootstrap_difference([], [1,2], n_boot=100)
+
+
+def test_bootstrap_rejects_too_few_iterations():
+    with pytest.raises(ValueError,match="n_boot"):
+        bootstrap_difference([1,2], [3,4], n_boot=20)
