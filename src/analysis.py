@@ -53,9 +53,15 @@ def validate(df):
 
 def bootstrap_difference(a, b, n_boot=1200, seed=24):
     """Percentile bootstrap CI for mean(b) - mean(a), independently by arm."""
-    rng = np.random.default_rng(seed)
+    if not isinstance(n_boot, (int, np.integer)) or n_boot < 100:
+        raise ValueError("n_boot must be an integer >= 100")
     a = np.asarray(a, dtype=float)
     b = np.asarray(b, dtype=float)
+    if a.ndim != 1 or b.ndim != 1 or len(a) == 0 or len(b) == 0:
+        raise ValueError("Both samples must be non-empty one-dimensional arrays")
+    if not np.isfinite(a).all() or not np.isfinite(b).all():
+        raise ValueError("Samples must contain only finite values")
+    rng = np.random.default_rng(seed)
     deltas = np.empty(n_boot)
     for i in range(n_boot):
         deltas[i] = b[rng.integers(len(b), size=len(b))].mean() - a[rng.integers(len(a), size=len(a))].mean()
