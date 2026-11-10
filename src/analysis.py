@@ -25,17 +25,29 @@ def validate(df):
     """Fail loudly when dataset assumptions are violated."""
     fields = {"user_id", "assigned_at", "variant", "device", "traffic_source",
               "converted", "order_value_rub", "refunded"}
-    assert fields.issubset(df.columns), "Missing columns in input dataset"
-    assert len(df) > 0, "Empty dataset"
-    assert df.user_id.notna().all() and df.user_id.is_unique, "Duplicates/null user_id"
-    assert set(df.variant) == {"control", "treatment"}, "Unexpected variants"
-    assert df[["converted", "refunded"]].isin([0, 1]).all().all(), "Invalid binary flags"
-    assert df[["converted", "refunded", "order_value_rub"]].notna().all().all()
-    assert (df.order_value_rub >= 0).all(), "Negative order value"
-    assert (df.loc[df.converted.eq(0), "order_value_rub"] == 0).all(), "Non-buyer with revenue"
-    assert (df.loc[df.converted.eq(1), "order_value_rub"] > 0).all(), "Buyer without revenue"
-    assert (df.refunded <= df.converted).all(), "Refund without purchase"
-    assert pd.to_datetime(df.assigned_at, errors="coerce").notna().all(), "Invalid dates"
+    if not fields.issubset(df.columns):
+        missing = sorted(fields.difference(df.columns))
+        raise ValueError(f"Missing columns in input dataset: {missing}")
+    if df.empty:
+        raise ValueError("Empty dataset")
+    if df.user_id.isna().any() or not df.user_id.is_unique:
+        raise ValueError("Duplicates/null user_id")
+    if df.variant.isna().any() or set(df.variant) != {"control", "treatment"}:
+        raise ValueError("Unexpected variants")
+    if not df[["converted", "refunded"]].isin([0, 1]).all().all():
+        raise ValueError("Invalid binary flags")
+    if df[["converted", "refunded", "order_value_rub"]].isna().any().any():
+        raise ValueError("Missing metric values")
+    if (df.order_value_rub < 0).any():
+        raise ValueError("Negative order value")
+    if (df.loc[df.converted.eq(0), "order_value_rub"] != 0).any():
+        raise ValueError("Non-buyer with revenue")
+    if (df.loc[df.converted.eq(1), "order_value_rub"] <= 0).any():
+        raise ValueError("Buyer without revenue")
+    if (df.refunded > df.converted).any():
+        raise ValueError("Refund without purchase")
+    if pd.to_datetime(df.assigned_at, errors="coerce").isna().any():
+        raise ValueError("Invalid dates")
     return df
 
 
